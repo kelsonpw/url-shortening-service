@@ -19,7 +19,6 @@ A simple URL shortening service with additional JSON API.
 
 ### Executing program
 
-* 
 ```sh
 rackup config.ru
 ```
