@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shortlink App</title>
+    <style>
+      body {
+          font-family:"Gill Sans", "Gill Sans MT", Sans-Serif;
+      }
+      .container {
+          width:400px;
+          margin:120px auto 0px auto;
+      }
+      h1 {
+          width:400px;
+          margin-bottom:12px;
+          text-align:center;
+          color:palevioletred;
+          font-size:40px;
+          padding-bottom:8px;
+          border-bottom:2px solid spalevioletred;
+      }
+      form {
+          display:block;
+          width:400px;
+      }
+      input {
+          display:block;
+          float:left;
+          padding:8px;
+          font-size:16px;
+      }
+      #url {
+          width:280px;
+          margin-right:12px;
+      }
+      #submit {
+          width:88px;
+          border:none;
+          background: palevioletred;
+          padding:10px;
+          color: white;
+      }
+      
+      .clear {
+          height:1px;
+          width:400px;
+          clear:both;
+      }
+      .result {
+          clear:both;
+          width:400px;
+          margin-top:12px;
+          border-top:2px solid palevioletred;
+          padding-top:12px;
+          text-align:center;
+      }
+      .result a {
+          font-size:24px;
+          display:block;
+          margin-top:8px;
+          color:white;
+          background: palevioletred;
+          padding:8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>shortlink app</h1>
+      <form method="post">
+        <input type="text" value="<%= h(params[:url]) %>" name="url" id="url" />
+        <input type="submit" value="shorten" id="submit" />
+      </form>
+      <div class="clear"></div>
+      <% if @base_url %>
+        <div class="result">
+          Your shortened URL is:
+          <a href="<%= @base_url %>"><%= @base_url %></a>
+        </div>
+      <% end %>
+    </div>
+  </body>
