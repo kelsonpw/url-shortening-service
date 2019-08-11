@@ -1,17 +1,6 @@
-require "sinatra"
-require "redis"
-require "json"
+require_relative "helpers"
 
 redis = Redis.new
-
-helpers do
-  include Rack::Utils
-  alias_method :h, :escape_html
-
-  def random_string(len)
-    rand(36 ** len).to_s(36)
-  end
-end
 
 get "/" do
   erb :index
@@ -19,26 +8,25 @@ end
 
 post "/" do
   if params[:url] and not params[:url].empty?
-    shortcode = random_string 5
-    @base_url = request.url + shortcode
-    redis.setnx("links:#{shortcode}", params[:url])
+    shortcode = encode(params[:url])
+    redis_save_url(redis, shortcode, params[:url])
+    @base_url = toURL(request.host_with_port, shortcode)
   end
   erb :index
 end
 
 get "/:shortcode" do
-  @url = redis.get("links:#{params[:shortcode]}")
+  @url = redis_read_url(redis, params[:shortcode])
   redirect @url || "/"
 end
 
 post "/api/compress" do
   content_type :json
-  request.body.rewind
-  params = JSON.parse(request.body.read, :symbolize_names => true)
+  params = parse(request.body)
   if params[:url]
-    shortcode = random_string(5)
-    url = request.base_url + "/" + shortcode
-    redis.setnx("links:#{shortcode}", params[:url])
+    shortcode = encode(params[:url])
+    redis_save_url(redis, shortcode, params[:url])
+    url = toURL(request.host_with_port, shortcode)
     {
       :shortcode => shortcode,
       :url => url,
@@ -52,11 +40,9 @@ end
 
 post "/api/expand" do
   content_type :json
-  request.body.rewind
-  params = JSON.parse(request.body.read, :symbolize_names => true)
-
+  params = parse(request.body)
   if params[:shortcode]
-    url = redis.get("links:#{params[:shortcode]}")
+    url = redis_read_url(redis, params[:shortcode])
     {
       :url => url,
       :shortcode => params[:shortcode],
