@@ -27,7 +27,6 @@ post "/api/compress" do
     shortcode = encode(params[:url])
     redis_save_url(redis, shortcode, params[:url])
     url = toURL(request.host_with_port, shortcode)
-    binding.pry
     {
       :shortcode => shortcode,
       :url => url,
