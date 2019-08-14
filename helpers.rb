@@ -7,7 +7,7 @@ helpers do
   end
 
   def toURL(host, encoded_key)
-    "http://#{host}/#{encoded_key}"
+    "http://#{host}/v1/#{encoded_key}"
   end
 
   def redis_save_url(rd, shortcode, url)
@@ -27,6 +27,8 @@ helpers do
   def smart_add_url_protocol(url)
     if url && !url_protocol_present?(url)
       "http://#{url}"
+    else
+      url
     end
   end
 

@@ -15,7 +15,7 @@ post "/" do
   erb :index
 end
 
-get "/:shortcode" do
+get "/v1/:shortcode" do
   @url = redis_read_url(redis, params[:shortcode])
   redirect @url || "/"
 end
