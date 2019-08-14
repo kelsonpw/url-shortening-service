@@ -25,14 +25,10 @@ helpers do
   end
 
   def smart_add_url_protocol(url)
-    if url && !url_protocol_present?(url)
-      "http://#{url}"
-    else
+    if url[/\Ahttp:\/\//] || url[/\Ahttps:\/\//]
       url
+    else
+      "http://#{url}"
     end
-  end
-
-  def url_protocol_present?(url)
-    url[/\Ahttp:\/\//] || url[/\Ahttps:\/\//]
   end
 end
